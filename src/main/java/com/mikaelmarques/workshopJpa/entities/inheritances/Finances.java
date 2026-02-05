@@ -1,6 +1,5 @@
 package com.mikaelmarques.workshopJpa.entities.inheritances;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
 import com.mikaelmarques.workshopJpa.entities.User;

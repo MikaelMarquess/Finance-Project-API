@@ -1,6 +1,5 @@
 package com.mikaelmarques.workshopJpa.config;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
