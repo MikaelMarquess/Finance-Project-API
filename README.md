@@ -78,9 +78,11 @@ Com o projeto sendo executado, use algum programa para usar as rotas fornecidas 
     "password": "123456"
 }
 ```
-**Response (JSON)**
+**Response (HEADERS)**
 
-Não retornará nada além da rota de login no header que será apresentada em seguida.
+```
+http://localhost:8080/authentication/login
+```
 
 ### Login usuário
 
