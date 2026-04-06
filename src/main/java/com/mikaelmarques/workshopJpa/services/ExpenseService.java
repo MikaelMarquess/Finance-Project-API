@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.mikaelmarques.workshopJpa.entities.Expenses;
 import com.mikaelmarques.workshopJpa.entities.User;
+import com.mikaelmarques.workshopJpa.entities.dtos.CreateExpensesDTO;
 import com.mikaelmarques.workshopJpa.entities.dtos.ExpensesDTO;
+import com.mikaelmarques.workshopJpa.entities.dtos.UpdateExpensesDTO;
 import com.mikaelmarques.workshopJpa.repositories.ExpensesRepository;
 import com.mikaelmarques.workshopJpa.repositories.UserRepository;
+import com.mikaelmarques.workshopJpa.security.config.CustomUserDetails;
 import com.mikaelmarques.workshopJpa.services.exceptions.ForbiddenException;
 import com.mikaelmarques.workshopJpa.services.exceptions.ResourceNotFound;
 
@@ -36,37 +39,36 @@ public class ExpenseService {
 		return expenses;
 	}
 	
-	private Expenses convertFromDTO(ExpensesDTO revenueDto, User user) {
+	private Expenses convertFromDTO(CreateExpensesDTO revenueDto, User user) {
 		return new Expenses(null, revenueDto.getFinanceValue(), revenueDto.getDescription(),
 				revenueDto.getDate(),revenueDto.getCategory(), user);
 	}
 	
 	private void financeThisUser(Long authorId, Long AuthorExpensesId) {
 		if(!authorId.equals(AuthorExpensesId)) {
-			throw new ForbiddenException();
+			throw new ForbiddenException("Unauthorized request.");
 		}
 	}
 	
-	private void updateDataExpense(Expenses expenses, ExpensesDTO expensesData) {
-		financeThisUser(expenses.getUser().getId(), expensesData.getUser().getId());
+	private void updateDataExpense(Expenses expenses, Long authorExpenseId ,UpdateExpensesDTO expensesData) {
+		financeThisUser(expenses.getUser().getId(), authorExpenseId);
 		expenses.setFinanceValue(expensesData.getFinanceValue());
 		expenses.setDescription(expensesData.getDescription());
 		expenses.setDate(expensesData.getDate());
 		expenses.setCategory(expensesData.getCategory());
 	}
 	
-	public Expenses createExpense(Long authorId, ExpensesDTO expensesDto) {
+	public Expenses createExpense(Long authorId, CreateExpensesDTO expensesDto) {
 		User user = userService.findUserById(authorId);
-		financeThisUser(authorId, expensesDto.getUser().getId());
 		Expenses expense = convertFromDTO(expensesDto, user);
 		expenseRepository.save(expense);
-		userRepository.save(user);
 		return expense;
 	}
 	
-	public Expenses updateExpense(Long expenseId, ExpensesDTO expenseData) {
+	public Expenses updateExpense(Long expenseId, Long userId, UpdateExpensesDTO expenseData) {
 		Expenses expense = findExpenseById(expenseId);
-		updateDataExpense(expense, expenseData);
+		financeThisUser(userId, expense.getUser().getId());
+		updateDataExpense(expense, userId ,expenseData);
 		expenseRepository.save(expense);
 		return expense;
 	}

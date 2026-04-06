@@ -3,42 +3,66 @@ package com.mikaelmarques.workshopJpa.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mikaelmarques.workshopJpa.entities.User;
 import com.mikaelmarques.workshopJpa.entities.dtos.UserLoginDTO;
 import com.mikaelmarques.workshopJpa.entities.dtos.UserRegisterDTO;
+import com.mikaelmarques.workshopJpa.enums.UserRolesEnum;
 import com.mikaelmarques.workshopJpa.repositories.UserRepository;
+import com.mikaelmarques.workshopJpa.security.config.CustomUserDetails;
+import com.mikaelmarques.workshopJpa.services.exceptions.ForbiddenException;
 import com.mikaelmarques.workshopJpa.services.exceptions.UnauthorizedAccessException;
+import com.mikaelmarques.workshopJpa.services.security.TokenService;
 
 @Service
-public class AuthenticationService {
+public class AuthenticationService{
+
+    private final AuthenticationManager authenticationManager;
 	
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private TokenService tokenService;
+
+    AuthenticationService(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
+	
 	private User fromDTO(UserRegisterDTO userAuthDto) {
-		return new User(null, userAuthDto.getName(), userAuthDto.getEmail(), userAuthDto.getPassword());
+		String password = new BCryptPasswordEncoder().encode(userAuthDto.getPassword());
+		return new User(null, userAuthDto.getName(), userAuthDto.getEmail(), password, UserRolesEnum.USER);
 	}
 	
-	protected User emailVerification(String email) {
-		Optional<User> user = userRepository.findByEmail(email);
-		return user.orElseThrow(() -> new UnauthorizedAccessException("Incorrect email or password"));
-	}
 	
-	protected User emailExists(String email) {
+	protected void emailExists(String email) {
 		Optional<User> user = userRepository.findByEmail(email);;
 		
 		if(user.isPresent()) {
 			throw new UnauthorizedAccessException("This email already exists");
 		}
-		
-		return user.orElse(null);
 	}
 	
-	private void authenticateUserPassword(String password, String userPassword) {
-		if(!password.equals(userPassword)) {
-			throw new UnauthorizedAccessException("Incorrect email or password");
+	private String authenticationToken(String email, String password) {
+		UsernamePasswordAuthenticationToken userNamePassword = 
+				new UsernamePasswordAuthenticationToken(email, password);
+				
+		try {
+			
+			Authentication auth = authenticationManager.authenticate(userNamePassword);
+			
+			CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+			 
+			 return tokenService.generateToken(user.getUsername());
+			
+		} catch (AuthenticationException e) {
+			throw new ForbiddenException("Incorrect email or password");
 		}
 	}
 	
@@ -48,10 +72,9 @@ public class AuthenticationService {
 		userRepository.save(user);
 	}
 
-	public User loginUser(UserLoginDTO userLogin) {
-		User user = emailVerification(userLogin.getEmail());
-		authenticateUserPassword(user.getPassword(), userLogin.getPassword());
-		return user;
+	public String loginUser(UserLoginDTO userLogin) {
+		
+		 return authenticationToken(userLogin.getEmail(), userLogin.getPassword());
 	}
 	
 }

@@ -5,12 +5,15 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password4j.BcryptPassword4jPasswordEncoder;
 
 import com.mikaelmarques.workshopJpa.entities.Expenses;
 import com.mikaelmarques.workshopJpa.entities.Revenue;
 import com.mikaelmarques.workshopJpa.entities.User;
 import com.mikaelmarques.workshopJpa.enums.ExpensesEnum;
 import com.mikaelmarques.workshopJpa.enums.RevenueEnum;
+import com.mikaelmarques.workshopJpa.enums.UserRolesEnum;
 import com.mikaelmarques.workshopJpa.repositories.ExpensesRepository;
 import com.mikaelmarques.workshopJpa.repositories.RevenueRepository;
 import com.mikaelmarques.workshopJpa.repositories.UserRepository;
@@ -34,7 +37,9 @@ public class Configuration implements CommandLineRunner{
 	@Transactional
 	public void run(String... args) throws Exception {
 	        
-		User user1 = new User(null, "Josias", "josias@gmail.com", "123456");
+		BCryptPasswordEncoder password = new BCryptPasswordEncoder();
+		
+		User user1 = new User(null, "Josias", "josias@gmail.com", password.encode("123456"), UserRolesEnum.USER);
 		userRepository.save(user1);
 		
 		Revenue revenue1 = new Revenue(null, 4500.00, "Salário do mês", LocalDate.now(), RevenueEnum.SALARY ,user1);
@@ -51,7 +56,7 @@ public class Configuration implements CommandLineRunner{
 		expensesRepository.save(expense3);
 		expensesRepository.save(expense4);
 		
-		User user2 = new User(null, "José", "jose@gmail.com", "123456");
+		User user2 = new User(null, "José", "jose@gmail.com", password.encode("123456"), UserRolesEnum.USER);
 		userRepository.save(user2);
 		
 		Revenue revenue3 = new Revenue(null, 7500.00, "Salário do mês", LocalDate.now(), RevenueEnum.SALARY ,user2);
@@ -65,7 +70,7 @@ public class Configuration implements CommandLineRunner{
 		expensesRepository.save(expense7);
 		expensesRepository.save(expense8);
 		
-		User user3 = new User(null, "Erinaldo", "erinaldo@gmail.com", "123456");
+		User user3 = new User(null, "Erinaldo", "erinaldo@gmail.com", password.encode("123456"), UserRolesEnum.USER);
 		userRepository.save(user3);
 		
 		Revenue revenue4 = new Revenue(null, 2550.00, "Salário do mês", LocalDate.now(), RevenueEnum.SALARY ,user3);

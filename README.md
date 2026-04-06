@@ -1,15 +1,24 @@
-# API de Finanças
+# Finance API - Controle Financeiro Pessoal
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![H2](https://img.shields.io/badge/H2_Database-1E88E5?style=for-the-badge)
+
+## 📄 Sobre o Projeto
+
+API REST para controle financeiro pessoal com autenticação JWT, desenvolvida em **Spring Boot**. O projeto permite o cadastro de receitas e despesas, com separação clara entre as finanças do usuário.
 
 ## 🛠 Tecnologias utilizadas
 
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge\&logo=openjdk\&logoColor=white)
-![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge\&logo=spring\&logoColor=white)
-![H2](https://img.shields.io/badge/H2_Database-1E88E5?style=for-the-badge)
-
-## 📄 Descrição
-
-API REST desenvolvida em Java com Spring Boot, criada com foco em portfólio e aprendizado.
-A aplicação permite que o usuário se cadastre, realize login e gerencie suas receitas e despesas, seguindo uma arquitetura em camadas.
+- **Java 21**
+- **Spring Boot**
+- **Spring Security + JWT**
+- **Spring Data JPA**
+- **H2 Database** (em memória)
+- **Maven**
+- **ModelMapper** / Bean Validation
 
 ## 📚 Sobre o desenvolvimento
 
@@ -18,26 +27,35 @@ Ao longo do desenvolvimento, busquei aplicar boas práticas como separação de 
 
 O projeto está em constante evolução e novas melhorias serão implementadas conforme avanço nos estudos.
 
+## 💡 O que aprendi e desafios superados
+Durante a criação desse projeto, enfrentei várias etapas e superei, aprimorando meu aprendizado em geral.
+
+- Implementar autenticação via Spring Security foi uma das maiores etapas que enfrentei durante o projeto, pois de início era muito complexo para mim, porém fui estudando seu fluxo e entendendo como ele funciona. E agora, o projeto está com Spring Security implementado com verificações de tokens.
+
+- Gerenciar corretamente relações entre as classes, como o usuário com suas finanças(one-to-many) fazendo com que a arquitetura fique correta entre suas classes.
+
+- Arquitetura em camadas também foi um desafio superado, pois a cada linha de código eu iria adicionar, faria revisar mentalmente se aquilo seria semânticamente correto para a arquitetura, e se não a quebraria e respeitaria sua hierarquia.
+
 ## 🚀 Melhorias futuras
 
 * Implementação de filtros de finanças por data, categoria e valor
-* Autenticação e autorização com Spring Security e OAuth2
-* Criptografia de senhas utilizando hash
-* Melhorias de performance e segurança
+* Autenticação e autorização com Spring Security ✔️
+* Criptografia de senhas utilizando hash ✔️
+* Melhorias de performance e segurança ✔️
 
 ## 🧱 Arquitetura
 
-O projeto segue arquitetura em camadas:
+O projeto segue **arquitetura em camadas**:
 
-- Controller
-- Service
-- Repository
-- DTO
-- Entity
+- Controller → Recebe as requisições
+- Service → Regras de negócios
+- Repository → acesso aos dados
+- DTO → transferência de dados
+- Entity → modelo do banco
 
 ## ⚙️ Pré-requisitos
 
-* Java 21+
+* Java 21 ou superior
 
 ## ▶️ Como executar o projeto
 
@@ -62,6 +80,11 @@ http://localhost:8080
 
 ## 🛣️ Rotas
 Com o projeto sendo executado, use algum programa para usar as rotas fornecidas pela API, como o postman.
+
+### Rota para acessar o banco de dados
+
+**URL NAVEGADOR H2DATABASE** ``http://localhost:8080/h2-console``
+
 ### Rotas de autenticação
 ### Registrar usuário
 
@@ -72,7 +95,6 @@ Com o projeto sendo executado, use algum programa para usar as rotas fornecidas 
 
 ```json
 {  
-    "id": null, //id será criado automaticamente após registro, permaneça com o valor null.
     "name": "Exemplo nome",
     "email": "exemplo@gmail.com",
     "password": "123456"
@@ -100,87 +122,70 @@ http://localhost:8080/authentication/login
 **Response (JSON)**
 ```json
 { 
-    "id": 4, //id do autor
-    "name": "Ronaldo"
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6Im1pazIxMjFAZ21haWwuY29tIiwiZXhwIjoxNzc0ODc3MDQ3fQ.vjWEteQObMXgpq1lwcZnk7G-tBucfRNQZ2J9GU1Eq1M"
 }
 ```
+
+**🔐AUTORIZAÇÃO**
+
+Após realizar o login com sucesso, será retornado um token JWT. Esse token deve ser utilizado para acessar rotas protegidas da API.
+
+Para isso, adicione o token no header da requisição da seguinte forma:
+
+``Authorization: Bearer Token SEU_TOKEN_AQUI``
+
 
 ### Rotas do usuário
 
 ### Todas finanças do usuário
 
-**GET** `http://localhost:8080/users/troque-pelo-id/finances`
+**GET** `http://localhost:8080/users/finances`
 
 **Response (JSON)**
 ```json
 {
-    "authorId": 1,
-    "revenues": [
-        {
-            "category": "SALARY",
-            "date": "2026-02-04",
-            "description": "Salário do mês",
-            "financeValue": 4500.0,
-            "id": 1,
-            "user": {
-                "id": 1,
-                "name": "Josias"
-            }
-        }
-    ],
-    "expenses": [
-        {
-            "category": "HOUSING",
-            "date": "2026-02-04",
-            "description": "Aluguel",
-            "financeValue": 800.0,
-            "id": 1,
-            "user": {
-                "id": 1,
-                "name": "Josias"
-            }
-        }
-    ],
-    "totalRevenue": 4500.0,
-    "totalDispense": 800.0,
-    "finalRecipe": 3700.0
+   "revenues": [],
+    "expenses": [],
+    "totalRevenue": 0.0,
+    "totalExpense": 0.0,
+    "finalRecipe": 0.0
 }
 ```
 
 ### Atualizar dados do usuário
 
-**PUT** `http://localhost:8080/users/troque-pelo-id-autor/updateData`
+**PUT** `http://localhost:8080/users/updateData`
 
 **Body (JSON)**
 ```json
 {
-    "id": 1, //troque pelo seu id
     "name": "Exemplo nome",
     "email": "exemplo@gmail.com",
     "password": "123456"
 }
 ```
 
+É apenas necessário preencher os dados que você deseja atualizar.
+
 **Response (Headers)**
 ```
 http://localhost:8080/authentication/login
 ```
-Após atualizar os dados, é necessário fazer login novamente. Isso foi planejado para futuramente implementar jwt token.
+Após atualizar os dados, é necessário fazer login novamente.
 
 ### Deletar dados
 
-**DELETE** `http://localhost:8080/users/troque-pelo-id-autor/delete`
+**DELETE** `http://localhost:8080/users/delete`
 
 **Body (JSON)**
 ```json
 {
-    "id": 1, //troque pelo seu id do autor
-    "email": "exemplo@gmail.com",
+    "email": "mik2121@gmail.com",
     "password": "123456"
 }
 ```
 
-**Response (status)**
+**Response (Status)**
 
 ```
 200 OK
@@ -190,22 +195,18 @@ Após atualizar os dados, é necessário fazer login novamente. Isso foi planeja
 
 ### Criar uma nova receita
 
-**POST** `http://localhost:8080/revenues/troque-pelo-id-autor`
+**POST** `http://localhost:8080/revenues/create`
 
 **Body (JSON)**
 ````json
 {
-    "id": null, //id será criado automaticamente após criar a receita, permaneça com o valor null.
     "financeValue": 1800.00,
     "description": "Descrição exemplo",
     "date": "2026-02-06",
-    "category": "SALARY", //categorias disponíveis no momento: SALARY, EXTRA, INVESTMENTS
-    "user": {
-        "id": 1, //troque pelo seu id do autor
-        "name": "Josias"
-    }
+    "category": "SALARY"
 }
 ````
+**CATEGORIAS DISPONIVEIS NO MOMENTO:** ``SALARY, EXTRA, INVESTMENTS``
 
 **Response (JSON)**
 ````json
@@ -214,11 +215,7 @@ Após atualizar os dados, é necessário fazer login novamente. Isso foi planeja
     "date": "2026-02-06",
     "description": "Descrição exemplo",
     "financeValue": 1800.0,
-    "id": 5, //id da receita
-    "user": {
-        "id": 1, // id do usuário
-        "name": "Josias"
-    }
+    "id": 5
 }
 ````
 
@@ -229,15 +226,10 @@ Após atualizar os dados, é necessário fazer login novamente. Isso foi planeja
 **Body (JSON)**
 ````json
 {
-    "id": 5, //troque pelo id da sua receita
-    "financeValue": 2500.00,
+    "financeValue": 1800.00,
     "description": "Descrição exemplo 2",
-    "date": "2026-02-08",
-    "category": "EXTRA", //categorias disponíveis no momento: SALARY, EXTRA, INVESTMENTS
-    "user": {
-        "id": 1, //troque pelo seu id do autor
-        "name": "Josias"
-    }
+    "date": "2026-02-06",
+    "category": "EXTRA"
 }
 ````
 
@@ -245,20 +237,16 @@ Após atualizar os dados, é necessário fazer login novamente. Isso foi planeja
 ````json
 {
     "category": "EXTRA",
-    "date": "2026-02-08",
+    "date": "2026-02-06",
     "description": "Descrição exemplo 2",
-    "financeValue": 2500.0,
-    "id": 5, //id da receita
-    "user": {
-        "id": 1, //id do autor
-        "name": "Josias"
-    }
+    "financeValue": 1800.0,
+    "id": 5
 }
 ````
 
 **Deletar a receita**
 
-**DELETE** `http://localhost:8080/revenues/troque-pelo-id-autor/delete/troque-pelo-id-receita`
+**DELETE** `http://localhost:8080/revenues/delete/troque-pelo-id-receita`
 
 **Response (STATUS)**
 
@@ -270,36 +258,28 @@ Após atualizar os dados, é necessário fazer login novamente. Isso foi planeja
 
 ### Criar uma nova despesa
 
-**POST** `http://localhost:8080/expenses/troque-pelo-id-autor`
+**POST** `http://localhost:8080/expenses/create`
 
 **Body (JSON)**
 
 ````json
 {
-    "id": null, //id será criado automaticamente após criar a receita, permaneça com o valor null.
-    "financeValue": 500.00,
-    "description": "Descrição exemplo 2",
+    "financeValue": 500,
+    "description": "descrição exemplo",
     "date": "2025-12-29",
-    "category": "HEALTH", //categorias disponíveis no momento: FOOD, HOUSING, TRANSPORTATION, LEISURE, HEALTH
-    "user": {
-        "id": 1, //troque pelo seu id do autor
-        "name": "Josias"
-    }
+    "category": "HEALTH"
 }
 ````
+**CATEGORIAS DISPONÍVEIS NO MOMENTO:** ``FOOD, HOUSING, TRANSPORTATION, LEISURE, HEALTH``
 
 **Response (JSON)**
 ````json
 {
     "category": "HEALTH",
     "date": "2025-12-29",
-    "description": "Descrição exemplo 2",
+    "description": "descrição exemplo",
     "financeValue": 500.0,
-    "id": 11, //id da despesa
-    "user": {
-        "id": 1, //id do autor
-        "name": "Josias"
-    }
+    "id": 11
 }
 ````
 
@@ -310,36 +290,27 @@ Após atualizar os dados, é necessário fazer login novamente. Isso foi planeja
 **Body (JSON)**
 ````json
 {
-    "id": 11, //troque pelo id da despesa
-    "financeValue": 500.00,
-    "description": "Descrição exemplo 3",
-    "date": "2025-12-30",
-    "category": "LEISURE",
-    "user": {
-        "id": 1, //troque pelo seu id do autor
-        "name": "Josias"
-    }
+    "financeValue": 300,
+    "description": "descricao exemplo 123",
+    "date": "2026-01-01",
+    "category": "LEISURE"
 }
 ````
 
 **Response (JSON)**
 ````json
 {
-    "category": "HEALTH",
-    "date": "2025-12-29",
-    "description": "Descrição exemplo 2",
-    "financeValue": 500.0,
-    "id": 11, //id da despesa
-    "user": {
-        "id": 1, //id do autor
-        "name": "Josias"
-    }
+    "category": "LEISURE",
+    "date": "2026-01-01",
+    "description": "descricao exemplo 123",
+    "financeValue": 300.0,
+    "id": 11
 }
 ````
 
 ### Deletar uma despesa
 
-**DELETE** `http://localhost:8080/expenses/troque-pelo-id-autor/delete/troque-pelo-id-despesa`
+**DELETE** `http://localhost:8080/expenses/delete/troque-pelo-id-despesa`
 
 **Response (STATUS)**
 ````

@@ -1,5 +1,7 @@
 package com.mikaelmarques.workshopJpa.entities.dtos;
 
+import com.mikaelmarques.workshopJpa.enums.UserRolesEnum;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -19,13 +21,16 @@ public class UserRegisterDTO {
 	@Size(min = 6, message = "Password must have at least 6 characters")
 	private String password;
 	
+	private UserRolesEnum role;
+	
 	public UserRegisterDTO() {}
 
-	public UserRegisterDTO(Long id, String name, String email, String password) {
+	public UserRegisterDTO(Long id, String name, String email, String password, UserRolesEnum role) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.role = role;
 	}
 
 	public Long getId() {
@@ -59,5 +64,15 @@ public class UserRegisterDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public UserRolesEnum getRole() {
+		return role;
+	}
+
+	public void setRole(UserRolesEnum role) {
+		this.role = role;
+	}
+	
+	
 	
 }

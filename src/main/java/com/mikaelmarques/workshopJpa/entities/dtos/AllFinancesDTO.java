@@ -18,13 +18,11 @@ import com.mikaelmarques.workshopJpa.entities.User;
 
 public class AllFinancesDTO {
 	
-	private Long authorId;
-	
 	private Double finalRecipe;
 	
 	private Double totalRevenue;
 	
-	private Double totalDispense;
+	private Double totalExpense;
 	
 	private List<RevenueDTO> revenues = new ArrayList<RevenueDTO>();
 	
@@ -33,13 +31,8 @@ public class AllFinancesDTO {
 	public AllFinancesDTO() {}
 	
 	public AllFinancesDTO(User user) {
-		this.authorId = user.getId();
 		this.revenues = user.getRevenues().stream().map((x) -> new RevenueDTO(x)).collect(Collectors.toList());
 		this.expenses = user.getExpenses().stream().map((x) -> new ExpensesDTO(x)).collect(Collectors.toList());
-	}
-
-	public Long getAuthorId() {
-		return authorId;
 	}
 
 	public List<RevenueDTO> getRevenues() {
@@ -58,10 +51,6 @@ public class AllFinancesDTO {
 		 this.expenses = expenses;
 	}
 	
-	public void setAuthorId(Long authorId) {
-		this.authorId = authorId;
-	}
-
 	public void setFinalRecipe(Double totalFinance) {
 		this.finalRecipe = totalFinance;
 	}
@@ -79,11 +68,11 @@ public class AllFinancesDTO {
 	}
 
 	public Double getTotalDispense() {
-		return totalDispense;
+		return totalExpense;
 	}
 
 	public void setTotalDispense(Double totalDispense) {
-		this.totalDispense = totalDispense;
+		this.totalExpense = totalDispense;
 	}
 
 	

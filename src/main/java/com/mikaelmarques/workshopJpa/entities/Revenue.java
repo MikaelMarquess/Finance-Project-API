@@ -1,6 +1,5 @@
 package com.mikaelmarques.workshopJpa.entities;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import com.mikaelmarques.workshopJpa.entities.inheritances.Finances;
@@ -13,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_revenue")
-public class Revenue extends Finances implements Serializable{
+public class Revenue extends Finances{
 	
 	private static final long serialVersionUID = 1L;
 	

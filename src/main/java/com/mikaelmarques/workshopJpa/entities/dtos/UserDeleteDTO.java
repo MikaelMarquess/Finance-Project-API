@@ -6,8 +6,6 @@ import jakarta.validation.constraints.Size;
 
 public class UserDeleteDTO {
 	
-	private Long id;
-	
 	@NotBlank(message = "Email is required")
 	@Email(message = "Invalid email format")
 	private String email;
@@ -19,17 +17,8 @@ public class UserDeleteDTO {
 	public UserDeleteDTO() {}
 
 	public UserDeleteDTO(Long id, String email, String password) {
-		this.id = id;
 		this.email = email;
 		this.password = password;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getEmail() {

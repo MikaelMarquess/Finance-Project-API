@@ -1,9 +1,15 @@
 package com.mikaelmarques.workshopJpa.entities;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.mikaelmarques.workshopJpa.enums.UserRolesEnum;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -15,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_user")
-public class User implements Serializable{
+public class User{
 	
 	/**
 	 * 
@@ -32,6 +38,8 @@ public class User implements Serializable{
 	
 	private String password;
 	
+	private UserRolesEnum role;
+	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Revenue> revenues = new ArrayList<Revenue>();
 	
@@ -40,11 +48,12 @@ public class User implements Serializable{
 	
 	public User() {}
 
-	public User(Long id, String name, String email, String password) {
+	public User(Long id, String name, String email, String password, UserRolesEnum role) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.role = role;
 	}
 
 	public Long getId() {
@@ -77,6 +86,14 @@ public class User implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public UserRolesEnum getRole() {
+		return role;
+	}
+
+	public void setRole(UserRolesEnum role) {
+		this.role = role;
 	}
 
 	public List<Revenue> getRevenues() {

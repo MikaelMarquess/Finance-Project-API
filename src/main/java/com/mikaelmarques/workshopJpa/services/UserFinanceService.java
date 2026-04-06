@@ -1,12 +1,8 @@
 package com.mikaelmarques.workshopJpa.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mikaelmarques.workshopJpa.entities.Expenses;
-import com.mikaelmarques.workshopJpa.entities.Revenue;
 import com.mikaelmarques.workshopJpa.entities.User;
 import com.mikaelmarques.workshopJpa.entities.dtos.AllFinancesDTO;
 import com.mikaelmarques.workshopJpa.entities.dtos.ExpensesDTO;
@@ -17,21 +13,6 @@ public class UserFinanceService {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private ExpenseService expenseService;
-	
-	@Autowired
-	private RevenueService revenueService;
-	
-	private AllFinancesDTO createAllFinanceDto(Long authorId, List<Revenue> revenues, List<Expenses> expenses) {
-		
-		AllFinancesDTO newFinanceDto = new AllFinancesDTO();
-		newFinanceDto.setAuthorId(authorId);
-		newFinanceDto.setRevenues(revenues.stream().map((x) -> new RevenueDTO(x)).toList());
-		newFinanceDto.setExpenses(expenses.stream().map((x) -> new ExpensesDTO(x)).toList());
-		return newFinanceDto;
-	}
 	
 	private AllFinancesDTO totalFinanceCalculation(AllFinancesDTO finances) {
 		double revenue = 0.0;

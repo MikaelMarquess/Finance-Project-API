@@ -2,37 +2,26 @@ package com.mikaelmarques.workshopJpa.entities.dtos;
 
 import java.time.LocalDate;
 
-import com.mikaelmarques.workshopJpa.entities.Expenses;
-import com.mikaelmarques.workshopJpa.enums.ExpensesEnum;
+import com.mikaelmarques.workshopJpa.entities.Revenue;
+import com.mikaelmarques.workshopJpa.enums.RevenueEnum;
 
-public class ExpensesDTO {
+public class CreateRevenueDTO {
 	
-	private Long id;
-
 	private Double financeValue;
 
 	private String description;
-	
+
 	private LocalDate date;
 	
-	private ExpensesEnum category;
+	private RevenueEnum category;
 	
-	public ExpensesDTO() {}
+	public CreateRevenueDTO() {}
 	
-	public ExpensesDTO(Expenses expenses) {
-		 this.id = expenses.getId();
-		 this.financeValue = expenses.getFinanceValue();
-		 this.description = expenses.getDescription();
-		 this.date = expenses.getDate();
-		 this.category = expenses.getCategory();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public CreateRevenueDTO(Revenue revenue) {
+		 this.financeValue = revenue.getFinanceValue();
+		 this.description = revenue.getDescription();
+		 this.date = revenue.getDate();
+		 this.category = revenue.getCategory();
 	}
 
 	public Double getFinanceValue() {
@@ -59,12 +48,13 @@ public class ExpensesDTO {
 		this.date = date;
 	}
 
-	public ExpensesEnum getCategory() {
+	public RevenueEnum getCategory() {
 		return category;
 	}
 
-	public void setCategory(ExpensesEnum category) {
+	public void setCategory(RevenueEnum category) {
 		this.category = category;
 	}
+
 	
 }

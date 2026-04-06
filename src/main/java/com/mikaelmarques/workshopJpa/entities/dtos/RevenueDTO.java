@@ -6,9 +6,9 @@ import com.mikaelmarques.workshopJpa.entities.Revenue;
 import com.mikaelmarques.workshopJpa.enums.RevenueEnum;
 
 public class RevenueDTO {
-
+	
 	private Long id;
-
+	
 	private Double financeValue;
 
 	private String description;
@@ -16,8 +16,6 @@ public class RevenueDTO {
 	private LocalDate date;
 	
 	private RevenueEnum category;
-
-	private UserDTO user;
 	
 	public RevenueDTO() {}
 	
@@ -27,15 +25,10 @@ public class RevenueDTO {
 		 this.description = revenue.getDescription();
 		 this.date = revenue.getDate();
 		 this.category = revenue.getCategory();
-		 this.user = new UserDTO(revenue.getUser());
 	}
-
+	
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Double getFinanceValue() {
@@ -68,15 +61,6 @@ public class RevenueDTO {
 
 	public void setCategory(RevenueEnum category) {
 		this.category = category;
-	}
-	
-	
-	public UserDTO getUser() {
-		return user;
-	}
-
-	public void setUser(UserDTO user) {
-		this.user = user;
 	}
 
 	

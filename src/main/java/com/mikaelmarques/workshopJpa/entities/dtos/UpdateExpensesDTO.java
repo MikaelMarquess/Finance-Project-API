@@ -5,9 +5,7 @@ import java.time.LocalDate;
 import com.mikaelmarques.workshopJpa.entities.Expenses;
 import com.mikaelmarques.workshopJpa.enums.ExpensesEnum;
 
-public class ExpensesDTO {
-	
-	private Long id;
+public class UpdateExpensesDTO {
 
 	private Double financeValue;
 
@@ -17,22 +15,13 @@ public class ExpensesDTO {
 	
 	private ExpensesEnum category;
 	
-	public ExpensesDTO() {}
+	public UpdateExpensesDTO() {}
 	
-	public ExpensesDTO(Expenses expenses) {
-		 this.id = expenses.getId();
+	public UpdateExpensesDTO(Expenses expenses) {
 		 this.financeValue = expenses.getFinanceValue();
 		 this.description = expenses.getDescription();
 		 this.date = expenses.getDate();
 		 this.category = expenses.getCategory();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Double getFinanceValue() {
